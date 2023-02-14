@@ -1,6 +1,6 @@
 import { readFileSync } from "fs"
 interface IImportable {
-    loadPlaylist(path: string): Playlist
+    loadPlaylist(): Playlist
 }
 
 class Artist {
@@ -94,9 +94,8 @@ class Playlist {
         return this._tracks
     }
 
-    constructor (name: string, songList: Song[]) {
+    constructor (name: string) {
         this.setName(name)
-        this.setList(songList)
     }
 
     addAlbum(album: Album) {
@@ -202,3 +201,10 @@ class User {
     }
 }
 
+let artist = new Artist("tool");
+let album = new Album("lateralus", artist, 2001)
+let song = new Song("schism")
+album.addTrack(song)
+
+let playlist = new Playlist("music");
+playlist.addAlbum(album)
