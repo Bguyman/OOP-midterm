@@ -76,14 +76,14 @@ class Song {
 
 class Playlist {
     private _name: string
-    private _songList: Song[]
+    private _tracks: Song[]
 
     setName(name: string) {
         this._name = name
     }
 
     setList(songs: Song[]) {
-        this._songList = songs
+        this._tracks = songs
     }
 
     get name(): string {
@@ -91,7 +91,7 @@ class Playlist {
     }
 
     get songList(): Song[] {
-        return this._songList
+        return this._tracks
     }
 
     constructor (name: string, songList: Song[]) {
@@ -100,7 +100,7 @@ class Playlist {
     }
 
     addAlbum(album: Album) {
-        album.tracks.forEach(track => this._songList.push(track))
+        album.tracks.forEach(track => this._tracks.push(track))
     }
 }
 
@@ -111,11 +111,39 @@ class LocalImporter implements IImportable{
         this._path = path
     }
 
-    loadPlaylist(path: string) {
+    loadPlaylist() {
         let playlist = JSON.parse(
             readFileSync(this._path, {encoding: "utf8"})
         )
             return playlist
+    }
+}
+
+class CloudImporter implements IImportable{
+    private _path: string = "cloudDatabase.json"
+    private _host: string
+
+    constructor(host: string) {
+        this._host = host
+    }
+
+    loadPlaylist() {
+        let playlist = JSON.parse(
+            readFileSync(this._path, {encoding: "utf8"})
+        )
+            return playlist
+    }
+}
+
+class PlaylistImporter {
+    private _importer: IImportable
+
+    constructor(importer: IImportable) {
+        this._importer = importer
+    }
+
+    importPlaylist(): Playlist {
+        return this._importer.loadPlaylist()
     }
 }
 
@@ -154,7 +182,7 @@ class User {
         this._albums.push(album)
     }
 
-    get ongs(): Song[] {
+    get songs(): Song[] {
         let songList: Song[] = []
         this._albums.forEach(album => {
             album.tracks.forEach(song => {
