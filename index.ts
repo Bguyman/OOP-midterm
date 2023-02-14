@@ -1,6 +1,6 @@
 import { readFileSync } from "fs"
 interface IImportable {
-    loadPlaylist(path: string)
+    loadPlaylist(path: string): Playlist
 }
 
 class Artist {
@@ -201,3 +201,4 @@ class User {
         return this._playlists
     }
 }
+
