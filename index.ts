@@ -132,6 +132,7 @@ class CloudImporter implements IImportable{
             readFileSync(this._path, {encoding: "utf8"})
         )
             return playlist
+            console.log(`importing playlist from ${this._host}`)
     }
 }
 
